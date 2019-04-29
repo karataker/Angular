@@ -21,9 +21,22 @@ app.post("/libros",function(req,res){
     res.send(req.body);
 })
 
-app.delete("/libros",function(req,res){
-    lista.splice(req.body,1);
-    res.send(req.body);
+app.get("/libros/:titulo",function(req,res){
+  var seleccion=lista.filter(function(e){
+    return e.titulo==req.params.titulo;
+  })[0];
+  res.send(seleccion);
+
+});
+
+app.delete("/libros/:titulo",function(req,res){
+    var seleccion=lista.filter(function(e){
+      return e.titulo==req.params.titulo;
+    });
+    var indice=lista.indexOf(seleccion);
+    lista.splice(indice,1);
+
+    res.send({"titulo":req.param.titulo});
 })
 
 app.listen(3000, function () {

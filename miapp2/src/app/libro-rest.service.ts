@@ -35,6 +35,10 @@ export class LibroRESTService {
   }
 
   borrar(libro:Libro):Observable<Libro>{
-    return this.http.delete<Libro>("http://localhost:3000/libros");
+    return this.http.delete<Libro>(`http://localhost:3000/libros/${libro.titulo}`);
+  }
+  
+  buscarUno(titulo:String):Observable<Libro>{
+    return this.http.get<Libro>(`http://localhost:3000/libros/${titulo}`);
   }
 }

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Libro } from '../libro';
 import { MiservicioService } from '../miservicio.service';
 import { LibroRESTService } from '../libro-rest.service';
+import { Router } from '@angular/router';
+import { flatMap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-componente1',
@@ -10,60 +13,69 @@ import { LibroRESTService } from '../libro-rest.service';
 })
 export class Componente1Component implements OnInit {
 
-  private _lista:Libro[]=[];
-  libroNuevo=new Libro();
-  mostrar:string;
-  filtroTitulo:string;
+  private _lista: Libro[] = [];
+  mostrar: string;
+  filtroTitulo: string;
 
-  get lista():Libro[]{
-    if(this.filtroTitulo!=null && this.filtroTitulo!=""){
-   
-    return this._lista.filter((item)=>{
-      return item.titulo.toLowerCase().startsWith(this.filtroTitulo.toLowerCase());
-    });
-  }else{
-    return this._lista;
+  get lista(): Libro[] {
+    if (this.filtroTitulo != null && this.filtroTitulo != "") {
+
+      return this._lista.filter((item) => {
+        return item.titulo.toLowerCase().startsWith(this.filtroTitulo.toLowerCase());
+      });
+    } else {
+      return this._lista;
+    }
   }
-}
-set lista(lista:Libro[]){
-  this._lista=lista;
-}
+  set lista(lista: Libro[]) {
+    this._lista = lista;
+  }
 
-  constructor(public servicio:LibroRESTService) { 
-  this.mostrar="lista";
-  /*
-  this.lista.push(new Libro("Java","cecilio",400));
-  this.lista.push(new Libro("php","Matilde",2500)); 
-  this.lista.push(new Libro("sql","Midwarino",10)); 
-  */
-    servicio.buscarTodos().subscribe((datos)=>{
-    this._lista=datos;
+  constructor(public servicio: LibroRESTService, public router: Router) {
+
+    /*
+    this.lista.push(new Libro("Java","cecilio",400));
+    this.lista.push(new Libro("php","Matilde",2500)); 
+    this.lista.push(new Libro("sql","Midwarino",10)); 
+    */
+    servicio.buscarTodos().subscribe((datos) => {
+      this._lista = datos;
     })
 
-  
+
   }
 
   ngOnInit() {
   }
 
-   nuevo(){
-     this.servicio.insertar(this.libroNuevo).subscribe((libro)=>{
-       this.lista.push(libro);
-       this.mostrar="lista";
-     });  
-   }
-  // borrar(libro:Libro){
-  //   var resultado=confirm("realmente quieres borrar");
-  //   console.log(resultado);
-  //   this.servicio.borrar(libro);
-  // }
-  verFormulario(){
-    this.libroNuevo=new Libro();
-    this.mostrar="formulario";
+
+  borrar(libro: Libro) {
+    //   this.servicio.borrar(libro).subscribe((titulo) => {
+    //     var borrable = this.lista.filter((e) => {
+    //       return e.titulo == titulo;
+    //     })[0];
+    //     var indice = this.lista.indexOf(borrable);
+    //     this.lista.splice(indice, 1);
+    //   });
+    this.servicio.borrar(libro).pipe(flatMap(() => {
+
+      return this.servicio.buscarTodos();
+    })).subscribe((datos) => {
+      this.lista = datos as Libro[];
+    })
   }
 
+  public editar(libro: Libro): void {
+    this.router.navigate(["formulario-editar", libro.titulo]);
+  }
+
+  // verFormulario(){
+  //   this.libroNuevo=new Libro();
+  //   this.mostrar="formulario";
+  // }
+
   // filtrar():void {
-    
+
   //   //console.log(this.lista);
   //   //filter es una funcion de orden superior
   //   //recive como parametro otra funcion (predicado)
