@@ -34,6 +34,10 @@ export class LibroRESTService {
     return this.http.post<Libro>("http://localhost:3000/libros",libro);
   }
 
+  salvar(libro:Libro):Observable<Libro>{
+    return this.http.put<Libro>(`http://localhost:3000/libros/${libro.titulo}`,libro);
+  }
+
   borrar(libro:Libro):Observable<Libro>{
     return this.http.delete<Libro>(`http://localhost:3000/libros/${libro.titulo}`);
   }

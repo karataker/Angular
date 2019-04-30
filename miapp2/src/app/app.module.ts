@@ -8,9 +8,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormularioComponent } from './formulario/formulario.component';
 import { Routes, RouterModule } from '@angular/router';
 import { FormularioEditarComponent } from './formulario-editar/formulario-editar.component';
+import { ComponentePipeComponent } from './componente-pipe/componente-pipe.component';
+import { PorcentajePipe } from './porcentaje.pipe';
 
 const rutas: Routes =[
   {path: 'componente1', component:Componente1Component},
+  {path: 'componentepipes', component:ComponentePipeComponent},
   {path: 'formulario', component: FormularioComponent},
   {path: 'formulario-editar/:titulo', component: FormularioEditarComponent},
   {path: '', redirectTo:'/componente1',pathMatch:'full'}];
@@ -20,7 +23,9 @@ const rutas: Routes =[
     AppComponent,
     Componente1Component,
     FormularioComponent,
-    FormularioEditarComponent
+    FormularioEditarComponent,
+    ComponentePipeComponent,
+    PorcentajePipe
   ],
   imports: [
     BrowserModule,

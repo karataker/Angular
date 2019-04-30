@@ -29,6 +29,16 @@ app.get("/libros/:titulo",function(req,res){
 
 });
 
+app.put('/libros/:titulo', function(req,res){
+  var seleccion= lista.filter(function(e){
+    return e.titulo==req.params.titulo;
+  })[0];
+  var indice=lista.indexOf(seleccion);
+  lista.splice(indice,1);
+  lista.push(req.body);
+  res.send(seleccion);
+})
+
 app.delete("/libros/:titulo",function(req,res){
     var seleccion=lista.filter(function(e){
       return e.titulo==req.params.titulo;
@@ -37,6 +47,14 @@ app.delete("/libros/:titulo",function(req,res){
     lista.splice(indice,1);
 
     res.send({"titulo":req.param.titulo});
+})
+
+app.get('librosdto',function(req,res){
+  var objeto1={"titulo":"java","paginas":200};
+  var objeto2={"titulo":"php","paginas":300};
+  var listaNueva=[];
+  listaNueva.push(objeto1);
+  listaNueva.push(objeto2);
 })
 
 app.listen(3000, function () {

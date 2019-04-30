@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Libro } from '../libro';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LibroRESTService } from '../libro-rest.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { LibroRESTService } from '../libro-rest.service';
 export class FormularioEditarComponent implements OnInit {
 libroEditar= new Libro();
  
-  constructor(public route:ActivatedRoute,public servicio:LibroRESTService) { 
+  constructor(public route:ActivatedRoute,public servicio:LibroRESTService, public router:Router) { 
 
   }
 
@@ -21,6 +21,11 @@ libroEditar= new Libro();
         this.libroEditar=libro;
       })
     })
+  }
+  salvar(){
+    this.servicio.salvar(this.libroEditar).subscribe(()=>{
+      this.router.navigate(["componente1"]);
+    });
   }
 
 }
